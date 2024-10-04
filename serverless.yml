@@ -25,14 +25,6 @@ functions:
       - httpApi:
           path: /auth/signup
           method: post
-  GetUser:
-    handler: functions/GetUser/index.handler
-    environment:
-      SECRET: ${env:SECRET_PHRASE}
-    events:
-      - httpApi:
-          path: /user
-          method: get
   CreateQuiz:
     handler: functions/CreateQuiz/index.handler
     environment:
@@ -56,6 +48,14 @@ functions:
     events:
       - httpApi:
           path: /quiz
+          method: get
+  FetchQuiz:
+    handler: functions/FetchQuiz/index.handler
+    environment:
+      SECRET: ${env:SECRET_PHRASE}
+    events:
+      - httpApi:
+          path: /quiz/questions
           method: get
 
 resources:
