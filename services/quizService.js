@@ -1,5 +1,6 @@
 const { db } = require("./db");
 const { v4: uuidv4 } = require("uuid");
+const { UpdateCommand } = require("@aws-sdk/lib-dynamodb");
 require("dotenv").config();
 
 const createQuiz = async (name, questions, username) => {
@@ -49,8 +50,28 @@ async function deleteQuiz(quizId, tableName) {
   }
 }
 
+const updateQuiz = async (quizId, updatedQuiz, tableName) => {
+  const params = {
+    TableName: tableName,
+    Key: { quizId },
+    UpdateExpression: "SET questions = :questions",
+    ExpressionAttributeValues: {
+      ":questions": updatedQuiz.questions,
+    },
+  };
+
+  try {
+    const command = new UpdateCommand(params);
+    await db.send(command);
+  } catch (error) {
+    console.error("Error updating quiz:", error);
+    throw new Error("Unable to update quiz"); // Rethrow the error for handling in the handler
+  }
+};
+
 module.exports = {
   createQuiz,
   fetchQuiz,
   deleteQuiz,
+  updateQuiz,
 };

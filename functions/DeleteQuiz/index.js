@@ -1,6 +1,5 @@
 const middy = require("@middy/core");
 const { validateToken } = require("../../middleware/auth");
-const { db } = require("../../services/db");
 const { sendResponse, sendError } = require("../../responses/index");
 const { fetchQuiz, deleteQuiz } = require("../../services/quizService");
 require("dotenv").config();
