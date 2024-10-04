@@ -24,7 +24,33 @@ const createQuiz = async (name, questions, username) => {
     throw new Error("Failed to add quiz to the database");
   }
 };
+async function fetchQuiz(quizId, tableName) {
+  try {
+    const { Item } = await db.get({
+      TableName: tableName,
+      Key: { quizId },
+    });
+    return Item;
+  } catch (error) {
+    throw new Error(`Failed to fetch user from ${tableName}: ${error.message}`);
+  }
+}
+async function deleteQuiz(quizId, tableName) {
+  try {
+    await db.delete({
+      TableName: tableName,
+      Key: { quizId },
+    });
+    return { message: `Quiz with quizId ${quizId} successfully deleted.` };
+  } catch (error) {
+    throw new Error(
+      `Failed to delete quiz from ${tableName}: ${error.message}`
+    );
+  }
+}
 
 module.exports = {
   createQuiz,
+  fetchQuiz,
+  deleteQuiz,
 };
