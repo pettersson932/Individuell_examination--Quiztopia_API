@@ -57,6 +57,14 @@ functions:
       - httpApi:
           path: /quiz/questions
           method: get
+  AddQuestionsQuiz:
+    handler: functions/AddQuestionsQuiz/index.handler
+    environment:
+      SECRET: ${env:SECRET_PHRASE}
+    events:
+      - httpApi:
+          path: /quiz/questions
+          method: post
 
 resources:
   Resources:
