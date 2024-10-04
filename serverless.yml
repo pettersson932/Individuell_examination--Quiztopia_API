@@ -1,0 +1,49 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: ${env:SERVERLESS_ORG}
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: ${env:SERVERLESS_SERVICE}
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  iam:
+    role: ${env:AWS_ROLE}
+
+functions:
+  Login:
+    handler: functions/Login/index.handler
+    environment:
+      SECRET: ${env:SECRET_PHRASE}
+    events:
+      - httpApi:
+          path: /auth/login
+          method: post
+  Signup:
+    handler: functions/Signup/index.handler
+    events:
+      - httpApi:
+          path: /auth/signup
+          method: post
+  GetUser:
+    handler: functions/GetUser/index.handler
+    environment:
+      SECRET: ${env:SECRET_PHRASE}
+    events:
+      - httpApi:
+          path: /user
+          method: get
+
+resources:
+  Resources:
+    jwtAccounts:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${env:TABLE_NAME_LOGIN}
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
