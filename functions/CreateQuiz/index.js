@@ -1,6 +1,5 @@
 const middy = require("@middy/core");
 const { validateToken } = require("../../middleware/auth");
-const { db } = require("../../services/db");
 const { sendResponse, sendError } = require("../../responses/index");
 const { fetchUser } = require("../../services/userService");
 const { createQuiz } = require("../../services/quizService");
@@ -21,13 +20,18 @@ const handler = middy()
         return sendError(404, "User not found");
       }
 
-      const quizId = await createQuiz(name, questions, username);
+      const questionsWithId = questions.map((question) => ({
+        ...question,
+        questionId: uuidv4(),
+      }));
+
+      const quizId = await createQuiz(name, questionsWithId, username);
 
       return sendResponse(201, {
         message: "Quiz created successfully",
         quizId,
         name,
-        questions,
+        questions: questionsWithId,
         username,
       });
     } catch (error) {
