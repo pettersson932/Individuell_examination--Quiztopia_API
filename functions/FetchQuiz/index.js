@@ -12,6 +12,7 @@ exports.handler = async (event) => {
 
     const response = {
       name: quiz.name,
+      creator: quiz.username,
       questions: quiz.questions.map((question) => question.question),
     };
 
