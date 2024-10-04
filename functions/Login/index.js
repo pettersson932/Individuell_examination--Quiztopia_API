@@ -21,7 +21,7 @@ exports.handler = async (event) => {
     const token = signToken(user);
     return sendResponse(200, token);
   } catch (error) {
-    console.error("Handler error:", error); // Log the handler error
+    console.error("Handler error:", error);
     return sendError(500, "Internal server error");
   }
 };

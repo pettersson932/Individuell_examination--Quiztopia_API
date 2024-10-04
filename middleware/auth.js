@@ -25,7 +25,7 @@ function signToken(user) {
   }
 
   const token = jwt.sign({ username: user.username }, process.env.SECRET, {
-    expiresIn: 3600, // sekunder
+    expiresIn: 3600,
   });
   console.log("token", token);
   return token;

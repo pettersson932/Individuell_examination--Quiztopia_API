@@ -26,18 +26,16 @@ async function createUser(user, tableName) {
 
 async function checkPassword(password, user) {
   try {
-    // Ensure the user object has the hashedPassword property
     if (!user || !user.hashedPassword) {
       throw new Error(
         "User object is invalid or does not contain hashedPassword."
       );
     }
-
     const isCorrect = await bcrypt.compare(password, user.hashedPassword);
     return isCorrect;
   } catch (error) {
     console.error("Error checking password:", error.message);
-    throw new Error("Password verification failed"); // Throw a new error to be handled at a higher level
+    throw new Error("Password verification failed");
   }
 }
 

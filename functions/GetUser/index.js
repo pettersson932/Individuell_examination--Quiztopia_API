@@ -14,7 +14,6 @@ const handler = middy()
         process.env.TABLE_NAME_LOGIN
       );
 
-      // If user is not found, you might want to send an error response
       if (!user) {
         return sendError(404, "User not found");
       }
@@ -25,7 +24,7 @@ const handler = middy()
         lastname: user.lastname,
       });
     } catch (error) {
-      console.error("Error occurred:", error); // Log the error for debugging
+      console.error("Error occurred:", error);
       return sendError(500, "Internal Server Error");
     }
   });
