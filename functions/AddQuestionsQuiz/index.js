@@ -1,7 +1,11 @@
 const middy = require("@middy/core");
 const { validateToken } = require("../../middleware/auth");
 const { sendResponse, sendError } = require("../../responses/index");
-const { fetchQuiz, deleteQuiz } = require("../../services/quizService");
+const {
+  fetchQuiz,
+  deleteQuiz,
+  addQuestionToQuiz,
+} = require("../../services/quizService");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
@@ -31,8 +35,13 @@ const handler = middy()
       }));
 
       //add questions
+      const allQuestions = [...quiz.questions, ...updatedQuestions];
 
-      return sendResponse(200, updatedQuestions);
+      quiz.questions = allQuestions;
+
+      await addQuestionToQuiz(quizId, quiz, process.env.TABLE_NAME_QUIZ);
+
+      return sendResponse(200, quiz);
     } catch (error) {
       console.error("Error occurred:", error);
       return sendError(500, "Internal Server Error");

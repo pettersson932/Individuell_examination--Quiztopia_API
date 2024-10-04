@@ -1,0 +1,286 @@
+{
+	"info": {
+		"_postman_id": "4ca060f4-fda4-489c-8e2b-cc568ad2346f",
+		"name": "quiztopia-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10456148"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "SIGNUP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"psw1234\",\r\n    \"email\": \"test1@hotmail.com\",\r\n    \"firstname\" : \"Pelle\",\r\n    \"lastname\": \"Paltnacke\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON to extract the body\r",
+									"var response = pm.response.json(); // Use pm.response.json() to get the response body as a JSON object\r",
+									"\r",
+									"// Check if the response contains the \"message\" key\r",
+									"if (response.message) {\r",
+									"    // Extract the token from the \"message\" field\r",
+									"    var token = response.message;\r",
+									"\r",
+									"    // Save the token to a collection variable\r",
+									"    pm.collectionVariables.set(\"myToken\", token); // Store it as a collection variable\r",
+									"\r",
+									"    // Log the token for debugging purposes (optional)\r",
+									"    console.log(\"Token saved to collection variable: \" + token);\r",
+									"} else {\r",
+									"    console.log(\"No token found in the response\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"psw1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "quiz",
+			"item": [
+				{
+					"name": "Create Quiz",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{myToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"my-first-quiz\",\r\n    \"questions\": [{ \"question\": \"what is?\", \"answer\": \"yes\", \"longitude\": \"123\", \"latitude\": \"234\"}, { \"question\": \"what are?\", \"answer\": \"no\", \"longitude\": \"123\", \"latitude\": \"234\"}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quiz",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"quiz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Questions Quiz",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{myToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quizId\": \"3a7ed850-1460-4030-b330-06b262ec9052\",\r\n    \"questions\": [{ \"question\": \"what is2?\", \"answer\": \"yes\", \"longitude\": \"123\", \"latitude\": \"234\"}, { \"question\": \"what are2?\", \"answer\": \"no\", \"longitude\": \"123\", \"latitude\": \"234\"}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quiz/questions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"quiz",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Quiz",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{myToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quizId\": \"4647d282-6cff-4049-94c9-67e3706dfb10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quiz",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"quiz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch All Quiz",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quiz",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"quiz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Quiz",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "quizId",
+								"value": "8084823e-874a-462b-8232-ec44ba080400",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quizId\": \"3a7ed850-1460-4030-b330-06b262ec9052\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quiz/questions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"quiz",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://vgtq98ewv3.execute-api.eu-north-1.amazonaws.com/",
+			"type": "string"
+		},
+		{
+			"key": "myToken",
+			"value": ""
+		}
+	]
+}

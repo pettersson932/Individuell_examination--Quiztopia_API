@@ -68,10 +68,35 @@ const updateQuiz = async (quizId, updatedQuiz, tableName) => {
     throw new Error("Unable to update quiz"); // Rethrow the error for handling in the handler
   }
 };
+async function addQuestionToQuiz(quizId, updatedQuiz, tableName) {
+  try {
+    const command = new UpdateCommand({
+      TableName: tableName,
+      Key: {
+        quizId: quizId, // Assuming quizId is the primary key
+      },
+      UpdateExpression: "SET #questions = :questions", // Update expression to set the questions
+      ExpressionAttributeNames: {
+        "#questions": "questions", // Placeholder for the attribute name
+      },
+      ExpressionAttributeValues: {
+        ":questions": updatedQuiz.questions, // New questions array
+      },
+      ReturnValues: "UPDATED_NEW", // Return the updated attributes
+    });
+
+    const result = await db.send(command); // Using db instance for sending the command
+    return result.Attributes; // Return the updated quiz attributes
+  } catch (error) {
+    console.error("Error updating quiz:", error);
+    throw new Error("Unable to update quiz");
+  }
+}
 
 module.exports = {
   createQuiz,
   fetchQuiz,
   deleteQuiz,
   updateQuiz,
+  addQuestionToQuiz,
 };
