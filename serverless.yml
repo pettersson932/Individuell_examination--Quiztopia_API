@@ -33,10 +33,18 @@ functions:
       - httpApi:
           path: /user
           method: get
+  CreateQuiz:
+    handler: functions/CreateQuiz/index.handler
+    environment:
+      SECRET: ${env:SECRET_PHRASE}
+    events:
+      - httpApi:
+          path: /quiz
+          method: post
 
 resources:
   Resources:
-    jwtAccounts:
+    userAccounts:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${env:TABLE_NAME_LOGIN}
@@ -45,5 +53,17 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: username
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    quiz:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${env:TABLE_NAME_QUIZ}
+        AttributeDefinitions:
+          - AttributeName: quizId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: quizId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
