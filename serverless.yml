@@ -49,6 +49,14 @@ functions:
       - httpApi:
           path: /quiz
           method: delete
+  FetchAllQuiz:
+    handler: functions/FetchAllQuiz/index.handler
+    environment:
+      SECRET: ${env:SECRET_PHRASE}
+    events:
+      - httpApi:
+          path: /quiz
+          method: get
 
 resources:
   Resources:
